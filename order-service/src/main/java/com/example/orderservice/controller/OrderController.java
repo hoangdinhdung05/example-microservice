@@ -5,6 +5,7 @@ import com.example.orderservice.dto.OrderResponse;
 import com.example.orderservice.dto.UserDto;
 import com.example.orderservice.entity.Order;
 import com.example.orderservice.repository.OrderRepository;
+import com.example.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,12 @@ public class OrderController {
 
     private final OrderRepository orderRepository;
     private final UserClient userClient;
+    private final OrderService orderService;
 
-    @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        return orderRepository.save(order);
-    }
+//    @PostMapping
+//    public Order createOrder(@RequestBody Order order) {
+//        return orderRepository.save(order);
+//    }
 
     @GetMapping
     public List<Order> getAllOrders() {
@@ -36,5 +38,10 @@ public class OrderController {
         UserDto user = userClient.getUserById(order.getUserId());
 
         return new OrderResponse(order.getId(), order.getProduct(), order.getPrice(), user);
+    }
+
+    @PostMapping
+    public Order placeOrder(@RequestBody Order order) {
+        return orderService.createOrder(order);
     }
 }
